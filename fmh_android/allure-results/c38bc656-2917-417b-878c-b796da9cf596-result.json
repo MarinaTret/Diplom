@@ -1,0 +1,85 @@
+{
+    "name": "openPageLoveIsAll",
+    "start": 1735369510482,
+    "stop": 1735369515353,
+    "stage": "finished",
+    "description": "Переход к странице LoveIsAll. тест-кейс №26",
+    "descriptionHtml": null,
+    "status": "passed",
+    "statusDetails": null,
+    "steps": [
+        {
+            "name": "Видимость главной страницы",
+            "start": 1735369513951,
+            "stop": 1735369513951,
+            "stage": "finished",
+            "description": null,
+            "descriptionHtml": null,
+            "status": "passed",
+            "statusDetails": null,
+            "steps": [
+            ],
+            "attachments": [
+            ],
+            "parameters": [
+            ]
+        },
+        {
+            "name": "Переход на страницу с цитатами",
+            "start": 1735369513953,
+            "stop": 1735369513953,
+            "stage": "finished",
+            "description": null,
+            "descriptionHtml": null,
+            "status": "passed",
+            "statusDetails": null,
+            "steps": [
+            ],
+            "attachments": [
+            ],
+            "parameters": [
+            ]
+        }
+    ],
+    "attachments": [
+    ],
+    "parameters": [
+    ],
+    "uuid": "c38bc656-2917-417b-878c-b796da9cf596",
+    "historyId": "de1f03118b53338a0af3d300a4857e15",
+    "fullName": "ru.iteco.fmhandroid.ui.Test.MainPageTest.openPageLoveIsAll",
+    "labels": [
+        {
+            "name": "package",
+            "value": "ru.iteco.fmhandroid.ui.Test"
+        },
+        {
+            "name": "testClass",
+            "value": "ru.iteco.fmhandroid.ui.Test.MainPageTest"
+        },
+        {
+            "name": "testMethod",
+            "value": "openPageLoveIsAll"
+        },
+        {
+            "name": "suite",
+            "value": "ru.iteco.fmhandroid.ui.Test.MainPageTest"
+        },
+        {
+            "name": "host",
+            "value": "localhost"
+        },
+        {
+            "name": "thread",
+            "value": "Instr: io.qameta.allure.android.runners.AllureAndroidJUnitRunner(634)"
+        },
+        {
+            "name": "framework",
+            "value": "junit4"
+        },
+        {
+            "name": "language",
+            "value": "kotlin"
+        }
+    ]
+}
