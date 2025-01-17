@@ -27,6 +27,7 @@ public class EditNewsPage {
     public ViewInteraction editDescription = onView(withId(R.id.news_item_description_text_input_edit_text));
     public ViewInteraction save = onView(withId(R.id.save_button));
     private final int buttonSave = R.id.save_button;
+    public ViewInteraction switcher = onView(withId(R.id.switcher));
 
     @Step("Редактирование категории")
     public void editCategory(String text) {
@@ -61,6 +62,16 @@ public class EditNewsPage {
         Allure.step("Редактирование описания");
         editDescription.check(matches(isDisplayed()));
         editDescription.perform(replaceText(text), closeSoftKeyboard());
+    }
+
+    public void editNewsFields(String category, String title, String publicationDate,
+                               String publicationTime, String description) {
+        Allure.step("Редактирование всей новости");
+        editCategory(category);
+        editTitle(title);
+        editDescription(description);
+        editDate(publicationDate);
+        editTime(publicationTime);
     }
 
     @Step("Клик на кнопку 'ОК'")

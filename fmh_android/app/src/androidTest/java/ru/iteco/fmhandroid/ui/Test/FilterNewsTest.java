@@ -46,9 +46,6 @@ public class FilterNewsTest {
     public void filterNewsEmptyForm() {
         mainPage.openNewsPage();
         newsPage.openFilterNews();
-        //filterNewsPage.addCategory("");
-        //filterNewsPage.setDateStart("");
-        //filterNewsPage.setDateEnd("");
         filterNewsPage.confirmFilter();
         newsPage.visabilityNews();
     }

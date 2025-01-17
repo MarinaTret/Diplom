@@ -23,13 +23,7 @@ import ru.iteco.fmhandroid.ui.DataHelper;
 
 public class FilterNewsPage {
     public ViewInteraction categoryText = onView(withId(R.id.news_item_category_text_auto_complete_text_view));
-    public ViewInteraction dataStart = onView(withId(R.id.news_item_publish_date_start_text_input_edit_text));
-    public ViewInteraction dataEnd = onView(withId(R.id.news_item_publish_date_end_text_input_edit_text));
-    public ViewInteraction filterActive = onView(withId(R.id.filter_news_active_material_check_box));
-    public ViewInteraction filterNotActive = onView(withId(R.id.filter_news_inactive_material_check_box));
     private final ViewInteraction buttonFilter = onView(withId(R.id.filter_button));
-    public ViewInteraction buttonCancel = onView(withId(R.id.cancel_button));
-    public ViewInteraction buttonOK = onView(withText("OK"));
 
     private final int filter = R.id.filter_button;
 

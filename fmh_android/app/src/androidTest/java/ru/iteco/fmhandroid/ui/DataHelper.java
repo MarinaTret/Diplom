@@ -1,13 +1,17 @@
 package ru.iteco.fmhandroid.ui;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.util.HumanReadables;
 import androidx.test.espresso.util.TreeIterables;
 
@@ -19,7 +23,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 import java.util.concurrent.TimeoutException;
+
+import ru.iteco.fmhandroid.dto.User;
 
 public class DataHelper {
 
@@ -76,8 +83,16 @@ public class DataHelper {
                 .build();
     }
 
-    public static String currentDate() {
-        return LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    public static String getCurrentDate() {
+        Date currentDate = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        return dateFormat.format(currentDate);
+    }
+
+    public static String getCurrentTime() {
+        Date currentDate = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        return dateFormat.format(currentDate);
     }
 
     public static String dateInPast() {
@@ -88,7 +103,66 @@ public class DataHelper {
         return LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
 
+    public static class User {
+        private final String login;
+        private final String password;
+
+        public User(String login, String password) {
+            this.login = login;
+            this.password = password;
+        }
+
+        public String getLogin() {
+            return login;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+    }
+
+    public User getValidUser() {
+        return new User("login2", "password2");
+    }
+
+    public User getNotValidUser() {
+        return new User("qwerty", "qwerty");
+    }
+
+    public User getSpacesInsteadOfUser() {
+        return new User("  ", "  ");
+    }
+
+    public User getSpacesBeforeLoginAndPasswordUser() {
+        return new User(" login2", " password2");
+    }
+
+
+    public static class Rand {
+        static final Random rand = new Random();
+
+        public static String randomCategory() {
+            String[] category = {
+                    "Зарплата",
+                    "Объявление",
+                    "День рождения",
+                    "Профсоюз",
+                    "Массаж",
+                    "Праздник",
+                    "Нужна помощь",
+                    "Благодарность",
+
+            };
+            return category[rand.nextInt(category.length)];
+        }
+    }
 }
+
+
+
+
+
+
 
 
 

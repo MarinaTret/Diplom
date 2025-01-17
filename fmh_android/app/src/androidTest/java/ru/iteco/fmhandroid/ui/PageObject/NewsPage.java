@@ -2,7 +2,10 @@ package ru.iteco.fmhandroid.ui.PageObject;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.swipeDown;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
@@ -13,6 +16,7 @@ import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import io.qameta.allure.kotlin.Allure;
@@ -31,11 +35,17 @@ public class NewsPage {
     private final int buttonControlPanel = R.id.edit_news_material_button;
     private final int containerPageNews = R.id.container_list_news_include;
     public ViewInteraction buttonFilterNews = onView(withId(R.id.filter_news_material_button));
+    public ViewInteraction newsList = onView(withId(R.id.news_list_recycler_view));
+    public ViewInteraction swipeRefresh = onView(withId(R.id.news_list_swipe_refresh));
 
     public int containerControlPanel = R.id.layout_background_image_view;
 
     public int getContainerNews() {
         return containerPageNews;
+    }
+
+    public ViewInteraction newsWithTitle(String title) {
+        return onView(allOf(withId(R.id.news_item_title_text_view), withText(title)));
     }
 
     @Step("Видимость текста Новости")

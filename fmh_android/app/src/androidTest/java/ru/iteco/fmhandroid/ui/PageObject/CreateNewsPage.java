@@ -30,13 +30,15 @@ public class CreateNewsPage {
     public ViewInteraction title = onView(withId(R.id.news_item_title_text_input_edit_text));
     public ViewInteraction time = onView(withId(R.id.news_item_publish_time_text_input_edit_text));
     public ViewInteraction date = onView(withId(R.id.news_item_publish_date_text_input_edit_text));
-    public ViewInteraction descriptionText = onView(withId(R.id.news_item_description_text_input_edit_text));
-    public ViewInteraction save = onView(withId(R.id.save_button));
-    public int buttonSave = R.id.save_button;
+    public ViewInteraction description = onView(withId(R.id.news_item_description_text_input_edit_text));
+    // public ViewInteraction save = onView(withId(R.id.save_button));
+    public ViewInteraction buttonSave = onView(withId(R.id.save_button));
+    // public int buttonSave = R.id.save_button;
     public ViewInteraction cancelButton = onView(withId(R.id.cancel_button));
     public ViewInteraction okButtonMessage = onView(withText("OK"));
 
-   @Step("Ввод данных в поле категории")
+
+    @Step("Ввод данных в поле категории")
     public void addCategory(String text) {
         Allure.step("Ввод данных в поле категории");
         category.check(matches(isDisplayed()));
@@ -68,17 +70,28 @@ public class CreateNewsPage {
     @Step("Ввод данных в поле описания")
     public void addDescription(String text) {
         Allure.step("Ввод данных в поле описания");
-        descriptionText.check(matches(isDisplayed()));
-        descriptionText.perform(replaceText(text), closeSoftKeyboard());
+        description.check(matches(isDisplayed()));
+        description.perform(replaceText(text), closeSoftKeyboard());
     }
 
     @Step("Клик на кнопку Сохранить")
     public void pressSave() {
         Allure.step("Клик на кнопку Сохранить");
-        onView(isRoot()).perform(waitDisplayed(buttonSave, 20000));
-        save.check(matches(isDisplayed()));
-        save.perform(scrollTo()).perform(click());
-        //save.perform(click());
+        buttonSave.check(matches(isDisplayed()));
+        buttonSave.perform(click());
+    }
+
+    @Step("Ввод данных для создания новости")
+    public void createNews(String category, String title, String publicationDate,
+                           String publicationTime, String description) {
+        Allure.step("Ввод данных для создания новости");
+        addCategory(category);
+        addTitle(title);
+        addDate(publicationDate);
+        addTime(publicationTime);
+        addDescription(description);
+
+        //pressSave();
     }
 
     @Step("Проверка сообщения")
@@ -87,5 +100,10 @@ public class CreateNewsPage {
         onView(withText(text))
                 .inRoot(withDecorView(not(decorView)))
                 .check(matches(isDisplayed()));
+    }
+
+    public void clickOKButton() {
+        Allure.step("Клик ОК в сообщении");
+        okButtonMessage.perform(click());
     }
 }

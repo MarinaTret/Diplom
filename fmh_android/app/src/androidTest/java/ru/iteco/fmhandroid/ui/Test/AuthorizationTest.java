@@ -15,10 +15,12 @@ import org.junit.runner.RunWith;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.Description;
+import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.AppActivity;
 import ru.iteco.fmhandroid.ui.PageObject.AuthorizationPage;
 import ru.iteco.fmhandroid.ui.DataHelper;
 import ru.iteco.fmhandroid.ui.PageObject.MainPage;
+//import ru.iteco.fmhandroid.ui.PageObject.MessageError;
 
 @LargeTest
 @RunWith(AllureAndroidJUnit4.class)
@@ -26,6 +28,7 @@ public class AuthorizationTest {
 
     AuthorizationPage authorizationPage = new AuthorizationPage();
     MainPage mainPage = new MainPage();
+    //MessageError messageError = new MessageError();
     private View decorView;
 
     @Rule
@@ -44,9 +47,7 @@ public class AuthorizationTest {
     @Test
     public void successfulAuthorization() {
         authorizationPage.title();
-        authorizationPage.inputLogin("login2");
-        authorizationPage.inputPassword("password2");
-        authorizationPage.clickButton();
+        authorizationPage.successfulAuthorization();
         mainPage.isDisplayedButtonProfile();
     }
 
@@ -54,20 +55,16 @@ public class AuthorizationTest {
     @Test
     public void authorizationWithEmptyData() {
         authorizationPage.title();
-        authorizationPage.clickButton();
+        authorizationPage.emptyData();
         authorizationPage.checkToastMessageText("Login and password cannot be empty", decorView);
-        authorizationPage.title();
     }
 
     @Description("Авторизация с пробелами вместо логина и пароля. Тест-кейс №10")
     @Test
     public void authorizationWithSpaceInFields() {
         authorizationPage.title();
-        authorizationPage.inputLogin("  ");
-        authorizationPage.inputPassword("  ");
-        authorizationPage.clickButton();
+        authorizationPage.authorizationWithSpaceInFields();
         authorizationPage.checkToastMessageText("Login and password cannot be empty", decorView);
-        authorizationPage.title();
     }
 
     @Description("Авторизация с пробелами перед логином и паролем. Тест-кейс №11")
@@ -75,23 +72,16 @@ public class AuthorizationTest {
     //должен упасть, это баг, не должна проходить авторизация с пробелами перед логином и паролем
     public void authorizationWithSpacesBeforeLoginAndPassword() {
         authorizationPage.title();
-        authorizationPage.inputLogin(" login2");
-        authorizationPage.inputPassword(" password2");
-        authorizationPage.clickButton();
+        authorizationPage.authorizationWithSpaceBeforeData();
         authorizationPage.checkToastMessageText("Something went wrong. Try again later.", decorView);
-        authorizationPage.title();
-        //mainPage.isDisplayedButtonProfile();
     }
 
     @Description("Авторизация с невалидными данными. Тест-кейс №12")
     @Test
     public void authorizationWithInvalidData() {
         authorizationPage.title();
-        authorizationPage.inputLogin("qwerty");
-        authorizationPage.inputPassword("qwerty");
-        authorizationPage.clickButton();
+        authorizationPage.authorizationWithInvalidData();
         authorizationPage.checkToastMessageText("Something went wrong. Try again later.", decorView);
-        authorizationPage.title();
     }
 }
 
