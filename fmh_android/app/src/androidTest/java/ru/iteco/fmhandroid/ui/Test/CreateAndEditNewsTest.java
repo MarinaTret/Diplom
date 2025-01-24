@@ -5,11 +5,12 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 
-import static ru.iteco.fmhandroid.ui.DataHelper.Rand.randomCategory;
-import static ru.iteco.fmhandroid.ui.DataHelper.dateInFuture;
-import static ru.iteco.fmhandroid.ui.DataHelper.dateInPast;
-import static ru.iteco.fmhandroid.ui.DataHelper.getCurrentDate;
-import static ru.iteco.fmhandroid.ui.DataHelper.getCurrentTime;
+import static ru.iteco.fmhandroid.ui.DataGeneration.Rand.randomCategory;
+import static ru.iteco.fmhandroid.ui.DataGeneration.dateInFuture;
+import static ru.iteco.fmhandroid.ui.DataGeneration.dateInPast;
+import static ru.iteco.fmhandroid.ui.DataGeneration.getCurrentDate;
+import static ru.iteco.fmhandroid.ui.DataGeneration.getCurrentTime;
+import static ru.iteco.fmhandroid.ui.DataHelper.errorMasssageFillEmptyFields;
 
 import android.view.View;
 
@@ -25,6 +26,7 @@ import org.junit.runner.RunWith;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.Description;
 import ru.iteco.fmhandroid.ui.AppActivity;
+import ru.iteco.fmhandroid.ui.DataGeneration;
 import ru.iteco.fmhandroid.ui.DataHelper;
 import ru.iteco.fmhandroid.ui.PageObject.AuthorizationPage;
 import ru.iteco.fmhandroid.ui.PageObject.ControlPanelNews;
@@ -32,6 +34,7 @@ import ru.iteco.fmhandroid.ui.PageObject.CreateNewsPage;
 import ru.iteco.fmhandroid.ui.PageObject.EditNewsPage;
 import ru.iteco.fmhandroid.ui.PageObject.MainPage;
 import ru.iteco.fmhandroid.ui.PageObject.NewsPage;
+
 
 @LargeTest
 @RunWith(AllureAndroidJUnit4.class)
@@ -42,7 +45,14 @@ public class CreateAndEditNewsTest {
     CreateNewsPage createNewsPage = new CreateNewsPage();
     EditNewsPage editNewsPage = new EditNewsPage();
     NewsPage newsPage = new NewsPage();
+    DataGeneration dataGeneration = new DataGeneration();
+    DataHelper dataHelper = new DataHelper();
     private View decorView;
+
+    String fakeTitle;
+    String fakeDescription;
+    String editTitle;
+    String editDescription;
 
     @Rule
     public ActivityScenarioRule<AppActivity> mActivityScenarioRule =
@@ -50,102 +60,94 @@ public class CreateAndEditNewsTest {
 
     @Before
     public void setUp() {
+
+        fakeTitle = dataGeneration.generateFakeTitle();
+        fakeDescription = dataGeneration.generateFakeDescription();
+        editTitle = dataGeneration.generateFakeEditTitle();
+        editDescription = dataGeneration.generateFakeEditDescription();
+
         Espresso.onView(isRoot()).perform(DataHelper.waitDisplayed(mainPage.getAppBarFragmentMain(), 100000));
         if (!mainPage.isDisplayedButtonProfile()) {
             authorizationPage.successfulAuthorization();
         }
+
+        mainPage.openNewsPage();
+        newsPage.openControlPanelNews();
+        controlPanelNews.addNews();
     }
+
 
     @Description("Успешное создание новости. тест-кейс №57")
     @Test
     public void successfulCreateNews() {
-        String publicationDate = getCurrentDate();
-        String publicationTime = getCurrentTime();
-        String title = "News 555";
-        String description = "Описание 555";
-        mainPage.openNewsPage();
-        newsPage.openControlPanelNews();
-        controlPanelNews.addNews();
-        createNewsPage.createNews(randomCategory(), title, publicationDate,
-                publicationTime, description);
+        createNewsPage.addCategory(randomCategory());
+        createNewsPage.addTitle(fakeTitle);
+        createNewsPage.addDate(getCurrentDate());
+        createNewsPage.addTime(getCurrentTime());
+        createNewsPage.addDescription(fakeDescription);
         createNewsPage.pressSave();
-        controlPanelNews.searchNewsWithTitle(title);
+        controlPanelNews.scrollNewsPage(fakeTitle);
+        controlPanelNews.searchNewsWithTitle(fakeTitle);
     }
 
     @Description("Создание новости с датой публикации в прошлом. тест-кейс №66")
     @Test
     public void CreateNewsInPast() {
         String publicationDate = dateInPast();
-        String publicationTime = getCurrentTime();
-        String title = "News 333";
-        String description = "Описание 333";
-
-        mainPage.openNewsPage();
-        newsPage.openControlPanelNews();
-        controlPanelNews.addNews();
-        createNewsPage.createNews(randomCategory(), title, publicationDate,
-                publicationTime, description);
+        createNewsPage.addCategory(randomCategory());
+        createNewsPage.addTitle(fakeTitle);
+        createNewsPage.addDate(dateInPast());
+        createNewsPage.addTime(getCurrentTime());
+        createNewsPage.addDescription(fakeDescription);
         createNewsPage.pressSave();
-        controlPanelNews.searchNewsWithTitle(title);
+        controlPanelNews.scrollNewsPage(fakeTitle);
+        controlPanelNews.searchNewsWithTitle(fakeTitle);
     }
 
     @Description("Создание новости с пустыми данными. тест-кейс №73")
     @Test
     public void createEmptyNews() {
-        mainPage.openNewsPage();
-        newsPage.openControlPanelNews();
-        controlPanelNews.addNews();
+
         createNewsPage.pressSave();
-        createNewsPage.checkToastMessageText("Fill empty fields", decorView);
+        dataHelper.waitForErrorMassage(errorMasssageFillEmptyFields);
+        //createNewsPage.checkToastMessageText("Fill empty fields", decorView);
     }
 
-    //тест падает
     @Description("Редактирование новости. тест-кейс №77")
     @Test
     public void editNews() {
-
-        String publicationDate = getCurrentDate();
-        String publicationTime = getCurrentTime();
-        String title = "News 777";
-        String newTitle = "News 777 new";
-        String description = "Описание 777";
-        String newDescription = "Описание 777 изменено";
-        mainPage.openNewsPage();
-        newsPage.openControlPanelNews();
-        controlPanelNews.addNews();
-        createNewsPage.createNews(randomCategory(), title, publicationDate,
-                publicationTime, description);
+        createNewsPage.addCategory(randomCategory());
+        createNewsPage.addTitle(fakeTitle);
+        createNewsPage.addDate(getCurrentDate());
+        createNewsPage.addTime(getCurrentTime());
+        createNewsPage.addDescription(fakeDescription);
         createNewsPage.pressSave();
+        controlPanelNews.scrollNewsPage(fakeTitle);
 
-        controlPanelNews.searchNewsWithTitle(title);
-        controlPanelNews.clickEditNews(title);
-        editNewsPage.editNewsFields(randomCategory(), newTitle, dateInFuture(),
-                publicationTime, newDescription);
+        controlPanelNews.clickEditNews(fakeTitle);
+
+        editNewsPage.editTitle(editTitle);
+        editNewsPage.editDate(dateInFuture());
+        editNewsPage.editTime(getCurrentTime());
+        editNewsPage.editDescription(editDescription);
 
         editNewsPage.clickSave();
-        controlPanelNews.searchNewsWithTitle(newTitle);
+        controlPanelNews.scrollNewsPage(editTitle);
+
+        controlPanelNews.searchNewsWithTitle(editTitle);
     }
 
-
-    //тест падает
     @Description("Удаление новости. тест-кейс №53")
     @Test
     public void deleteNews() {
-        String publicationDate = getCurrentDate();
-        String publicationTime = getCurrentTime();
-        String title = "News 1";
-        String description = "description";
-
-        mainPage.openNewsPage();
-        newsPage.openControlPanelNews();
-        controlPanelNews.addNews();
-
-        createNewsPage.createNews(randomCategory(), title, publicationDate,
-                publicationTime, description);
+        createNewsPage.addCategory(randomCategory());
+        createNewsPage.addTitle(fakeTitle);
+        createNewsPage.addDate(getCurrentDate());
+        createNewsPage.addTime(getCurrentTime());
+        createNewsPage.addDescription(fakeDescription);
         createNewsPage.pressSave();
-
-        controlPanelNews.clickDeleteNews(title);
-        controlPanelNews.checkIfNoNews(title);
-
+        controlPanelNews.scrollNewsPage(fakeTitle);
+        controlPanelNews.clickDeleteNews(fakeTitle);
+        controlPanelNews.checkIfNoNews(fakeTitle);
     }
 }

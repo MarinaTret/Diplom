@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:visibility="visible">
 
     <include
         android:id="@+id/container_custom_app_bar_include_on_fragment_create_edit_news"
@@ -38,10 +39,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:hint="@string/news_item_category"
-                    app:startIconDrawable="@drawable/ic_warning_circle"
-                    app:startIconTint="@color/mtrl_textinput_empty_field_stroke_color"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:startIconDrawable="@drawable/ic_warning_circle"
+                    app:startIconTint="@color/mtrl_textinput_empty_field_stroke_color">
 
                     <AutoCompleteTextView
                         android:id="@+id/news_item_category_text_auto_complete_text_view"

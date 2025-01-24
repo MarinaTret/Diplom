@@ -112,4 +112,7 @@ dependencies {
     androidTestImplementation "joda-time:joda-time:2.12.1"
     //testImplementation 'io.qameta.allure:allure-junit4:2.13.0'
     //testImplementation 'io.qameta.allure:allure-gradle:2.13.0'
+    androidTestImplementation  'com.github.javafaker:javafaker:1.0.2'
+    androidTestImplementation 'org.hamcrest:hamcrest-library:2.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.6.1'
 }

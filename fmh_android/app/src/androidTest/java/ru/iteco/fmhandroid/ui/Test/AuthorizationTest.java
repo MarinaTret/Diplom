@@ -2,6 +2,10 @@ package ru.iteco.fmhandroid.ui.Test;
 
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 
+import static ru.iteco.fmhandroid.ui.DataHelper.errorMasssageFillEmptyFields;
+import static ru.iteco.fmhandroid.ui.DataHelper.errorMasssageLoginAndPasswordCannotBeEmpty;
+import static ru.iteco.fmhandroid.ui.DataHelper.errorMasssageSomethingWentWrong;
+
 import android.view.View;
 
 import androidx.test.espresso.Espresso;
@@ -28,7 +32,7 @@ public class AuthorizationTest {
 
     AuthorizationPage authorizationPage = new AuthorizationPage();
     MainPage mainPage = new MainPage();
-    //MessageError messageError = new MessageError();
+    DataHelper dataHelper = new DataHelper();
     private View decorView;
 
     @Rule
@@ -64,7 +68,8 @@ public class AuthorizationTest {
     public void authorizationWithSpaceInFields() {
         authorizationPage.title();
         authorizationPage.authorizationWithSpaceInFields();
-        authorizationPage.checkToastMessageText("Login and password cannot be empty", decorView);
+        dataHelper.waitForErrorMassage(errorMasssageLoginAndPasswordCannotBeEmpty);
+        //authorizationPage.checkToastMessageText("Login and password cannot be empty", decorView);
     }
 
     @Description("Авторизация с пробелами перед логином и паролем. Тест-кейс №11")
@@ -73,7 +78,8 @@ public class AuthorizationTest {
     public void authorizationWithSpacesBeforeLoginAndPassword() {
         authorizationPage.title();
         authorizationPage.authorizationWithSpaceBeforeData();
-        authorizationPage.checkToastMessageText("Something went wrong. Try again later.", decorView);
+        dataHelper.waitForErrorMassage(errorMasssageSomethingWentWrong);
+        //authorizationPage.checkToastMessageText("Something went wrong. Try again later.", decorView);
     }
 
     @Description("Авторизация с невалидными данными. Тест-кейс №12")
@@ -81,7 +87,8 @@ public class AuthorizationTest {
     public void authorizationWithInvalidData() {
         authorizationPage.title();
         authorizationPage.authorizationWithInvalidData();
-        authorizationPage.checkToastMessageText("Something went wrong. Try again later.", decorView);
+        dataHelper.waitForErrorMassage(errorMasssageSomethingWentWrong);
+        //authorizationPage.checkToastMessageText("Something went wrong. Try again later.", decorView);
     }
 }
 

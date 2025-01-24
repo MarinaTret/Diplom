@@ -5,6 +5,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,10 +13,14 @@ import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.matcher.RootMatchers;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.util.HumanReadables;
 import androidx.test.espresso.util.TreeIterables;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,9 +31,11 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
 
+import io.qameta.allure.kotlin.Allure;
 import ru.iteco.fmhandroid.dto.User;
 
 public class DataHelper {
+
 
     /**
      * Perform action of waiting for a specific view id to be displayed.
@@ -56,6 +63,7 @@ public class DataHelper {
         };
     }
 
+
     public static boolean isViewVisible(View view) {
         return view.isShown();
     }
@@ -81,26 +89,6 @@ public class DataHelper {
                 .withViewDescription(HumanReadables.describe(view))
                 .withCause(new TimeoutException())
                 .build();
-    }
-
-    public static String getCurrentDate() {
-        Date currentDate = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        return dateFormat.format(currentDate);
-    }
-
-    public static String getCurrentTime() {
-        Date currentDate = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        return dateFormat.format(currentDate);
-    }
-
-    public static String dateInPast() {
-        return LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-    }
-
-    public static String dateInFuture() {
-        return LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
 
     public static class User {
@@ -137,26 +125,41 @@ public class DataHelper {
         return new User(" login2", " password2");
     }
 
+    public void waitForErrorMassage(String text) {
 
-    public static class Rand {
-        static final Random rand = new Random();
+        Allure.step("Проверить текст ошибки");
 
-        public static String randomCategory() {
-            String[] category = {
-                    "Зарплата",
-                    "Объявление",
-                    "День рождения",
-                    "Профсоюз",
-                    "Массаж",
-                    "Праздник",
-                    "Нужна помощь",
-                    "Благодарность",
+        final int timeout = 5000;
+        final int interval = 100;
 
-            };
-            return category[rand.nextInt(category.length)];
+        long startTime = System.currentTimeMillis();
+        boolean isElementFound = false;
+
+        while (!isElementFound && (System.currentTimeMillis() - startTime < timeout)) {
+            try {
+                onView(ViewMatchers.withText(text))
+                        .inRoot(RootMatchers.withDecorView(Matchers.instanceOf(View.class)))
+                        .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+                isElementFound = true;
+            } catch (Exception e) {
+
+            }
+            SystemClock.sleep(interval);
+        }
+
+        if (!isElementFound) {
+            throw new RuntimeException("Element not found within the allotted time");
         }
     }
+
+    public static final String errorMasssageSomethingWentWrong = "Something went wrong. Try again later.";
+    public static final String errorMasssageLoginAndPasswordCannotBeEmpty = "Login and password cannot be empty";
+    public static final String errorMasssageFillEmptyFields = "Fill empty fields";
 }
+
+
+
+
 
 
 
